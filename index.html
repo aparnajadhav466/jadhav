@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Click the Circle Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #scoreboard {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    #circle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #ff2e63;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #08d9d6;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #222;
+      transition: 0.2s;
+    }
+
+    #startBtn:hover {
+      background: #00c9b7;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Click the Circle</h1>
+  <div id="scoreboard">Score: 0 | Time: 30s</div>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+  <div id="circle"></div>
+
+  <script>
+    const circle = document.getElementById('circle');
+    const scoreboard = document.getElementById('scoreboard');
+    const startBtn = document.getElementById('startBtn');
+
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval;
+    let timerInterval;
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      scoreboard.textContent = `Score: ${score} | Time: ${timeLeft}s`;
+      startBtn.style.display = 'none';
+      circle.style.display = 'block';
+
+      moveCircle();
+      gameInterval = setInterval(moveCircle, 800);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        scoreboard.textContent = `Score: ${score} | Time: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function moveCircle() {
+      const maxWidth = window.innerWidth - 60;
+      const maxHeight = window.innerHeight - 60;
+      const x = Math.random() * maxWidth;
+      const y = Math.random() * maxHeight;
+      circle.style.left = `${x}px`;
+      circle.style.top = `${y}px`;
+    }
+
+    circle.addEventListener('click', () => {
+      score++;
+      scoreboard.textContent = `Score: ${score} | Time: ${timeLeft}s`;
+      moveCircle();
+    });
+
+    function endGame() {
+      clearInterval(gameInterval);
+      clearInterval(timerInterval);
+      circle.style.display = 'none';
+      startBtn.style.display = 'block';
+      alert(`Game Over! 🎉 Your score is ${score}`);
+    }
+  </script>
+
+</body>
+</html>
